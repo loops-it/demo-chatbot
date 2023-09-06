@@ -353,13 +353,13 @@ const Chatbot = () => {
       <div className={`${styles.chatTopBar} d-flex flex-row `}>
         <div className="col-12 text-center d-flex flex-row justify-content-between px-2">
           <Image src="/chat-logo.png" alt="AI" width={70} height={25} />
-          <button
+          {/* <button
             className="close-button"
             onClick={handleCloseChat}
             title="Close Chat"
           >
             <AiOutlineClose />{' '}
-          </button>
+          </button> */}
         </div>
       </div>
       {/* chat top header end =======================*/}
