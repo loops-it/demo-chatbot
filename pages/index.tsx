@@ -372,18 +372,17 @@ const Chatbot = () => {
           </div> */}
 
           <div
-            className={`${styles.botChatMsgContainer} d-flex flex-column my-2`}
+            className={`${styles.botChatMsgContainer} d-flex flex-row my-2`}
           >
             <div className="d-flex">
               <Image src="/chat-header.png" alt="AI" width="40" height="40" />
             </div>
-            <div className={`d-flex flex-column py-3`}>
+            <div className={`d-flex flex-column py-2`}>
               <div
-                className={`welcomeMessageContainer d-flex flex-column align-items-center`}
+                className={`welcomeMessageContainer d-flex flex-column align-items-start`}
               >
-                <p className="mt-2">
-                  Hello, Welcome to Loops. Please select the language to get
-                  started.
+                <p className="mb-0">
+                  Hello, Welcome to Loops.
                 </p>
               </div>
             </div>

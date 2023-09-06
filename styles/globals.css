@@ -169,7 +169,8 @@ aside.EmojiPickerReact.epr-main{
   background-color: transparent;
   border: solid 1px #000;
   border-radius: 30px;
-  width: 280px;
+  border-top-left-radius: 0px;
+  width: max-content;
 }
 .close-button{
   /* position: absolute; */
