@@ -189,7 +189,7 @@ const Chatbot = () => {
       setMessageState((state) => ({ ...state, pending: '' }));
 
       const response = await fetch(
-        'http://localhost:3000/api/generate',
+        '/api/generate',
         {
           method: 'POST',
           headers: {
