@@ -481,7 +481,7 @@ const Chatbot = () => {
                   <div
                     className={`${styles.botChatMsgContainer} ${userStyles} d-flex flex-column-reverse my-2`}
                   >
-                    <div className={`${styles.iconWrapper} d-flex `}>{icon}</div>
+                    <div className={`${iconWrapper} d-flex `}>{icon}</div>
                     <div className={`${wrapper} d-flex flex-column ms-2`}>
                       <div
                         className={`${styles.botMessageContainer} ${userHomeStyles} d-flex flex-column my-1`}
