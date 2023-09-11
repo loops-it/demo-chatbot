@@ -372,7 +372,7 @@ const Chatbot = () => {
           </div> */}
 
           <div
-            className={`${styles.botChatMsgContainer} d-flex flex-column-reverse my-2`}
+            className={`${styles.botChatMsgContainer} d-flex flex-row my-2`}
           >
             <div className="d-flex">
               <Image src="/chat-header.png" alt="AI" width="40" height="40" />
@@ -404,7 +404,6 @@ const Chatbot = () => {
             let icon;
             let className;
             let userHomeStyles;
-            let iconWrapper = 'justify-content-end';
             let wrapper = 'align-items-end justify-content-end';
             let userStyles = 'justify-content-end flex-row-reverse float-end';
 
@@ -435,7 +434,6 @@ const Chatbot = () => {
               className = styles.apimessage;
               userStyles = 'justify-content-start flex-row float-start';
               wrapper = 'align-items-start justify-content-start';
-              iconWrapper = 'justify-content-start';
             } else if (message.type === 'userMessage') {
               icon = (
                 <Image
@@ -443,12 +441,11 @@ const Chatbot = () => {
                   alt="Me"
                   width="40"
                   height="40"
-                  className={`${styles.botImage}`}
+                  className={styles.botImage}
                   priority
                 />
               );
               userHomeStyles = styles.userApiStyles;
-              iconWrapper = 'justify-content-end';
               // The latest message sent by the user will be animated while waiting for a response
               className =
                 loading && index === chatMessages.length - 1
@@ -479,9 +476,9 @@ const Chatbot = () => {
                   className={styles.botMessageContainerWrapper}
                 >
                   <div
-                    className={`${styles.botChatMsgContainer} ${userStyles} d-flex flex-column-reverse my-2`}
+                    className={`${styles.botChatMsgContainer} ${userStyles} d-flex my-2`}
                   >
-                    <div className={`${iconWrapper} d-flex `}>{icon}</div>
+                    <div className="d-flex">{icon}</div>
                     <div className={`${wrapper} d-flex flex-column ms-2`}>
                       <div
                         className={`${styles.botMessageContainer} ${userHomeStyles} d-flex flex-column my-1`}
