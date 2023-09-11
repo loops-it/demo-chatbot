@@ -488,7 +488,7 @@
 }
 
 .botChatMsgContainer {
-  max-width: 80%;
+  max-width: 98%;
 }
 
 .otherChatContainer {
@@ -519,17 +519,17 @@
   color: #000;
   border: solid 1px #3d3d3d;
   border-top-right-radius: 30px;
-  border-top-left-radius: 0px;
+  border-top-left-radius: 30px;
   border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
+  border-bottom-left-radius: 0px;
 }
 .userApiStyles{
   /* border-radius: 30px !important; */
   background-color: #DDDDDD !important;
-  border-top-right-radius: 0px !important;
+  border-top-right-radius: 30px !important;
   border-top-left-radius: 30px !important;
   border-bottom-left-radius: 30px !important;
-  border-bottom-right-radius: 30px !important;
+  border-bottom-right-radius: 0px !important;
   margin-right: 8px !important;
   border: solid 1px #3d3d3d;
   padding-left: 20px !important;
