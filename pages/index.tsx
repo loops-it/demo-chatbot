@@ -9,6 +9,7 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import { AiOutlineClose, AiOutlineSend } from 'react-icons/ai';
 import { Document } from 'langchain/document';
 import axios from 'axios';
+import Script from 'next/script';
 
 const Chatbot = () => {
   const [query, setQuery] = useState<string>('');
@@ -348,6 +349,7 @@ const Chatbot = () => {
   // }
 
   return (
+    <>
     <Layout>
       {/* chat top header =======================*/}
       <div className={`${styles.chatTopBar} d-flex flex-row `}>
@@ -658,6 +660,7 @@ const Chatbot = () => {
       )}
       {/* input fields end ================= */}
     </Layout>
+    </>
   );
 };
 
