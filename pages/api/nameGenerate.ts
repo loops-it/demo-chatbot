@@ -30,7 +30,7 @@ export default async function (req: { body: { user_Message: string; }; }, res: {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `If "${userQuestion}" is asking about your name, just say yes.`,
+      prompt: `Is "${userQuestion}" is asking about your name or asking about who developed you? if it is about name just say "name", if it is about your developer just say "developer", if it is not about name or developer just say "other" ? Do not use any other punctuation or words in the answer.`,
       temperature: 0.6,
     });
     console.log("bot : ",completion.data.choices[0])

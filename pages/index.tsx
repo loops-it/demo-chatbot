@@ -189,41 +189,38 @@ const Chatbot = () => {
       setQuery('');
       setMessageState((state) => ({ ...state, pending: '' }));
 
-      // const responseName = await fetch(
-      //   '/api/nameGenerate',
-      //   {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({
-      //       user_Message: question
-      //     }),
-      //   },
-      // );
-      // if (responseName.status !== 200) {
-      //   const error = await responseName.json();
-      //   throw new Error(error.message);
-      // }
-      // const dataName = await responseName.json();
-      // console.log("data bot : ", dataName)
+      const responseName = await fetch(
+        '/api/nameGenerate',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_Message: question
+          }),
+        },
+      );
+      if (responseName.status !== 200) {
+        const error = await responseName.json();
+        throw new Error(error.message);
+      }
+      const dataName = await responseName.json();
+      console.log("data bot : ", dataName)
 
-      // if ((dataName.result.trim() === "Yes") || 
-      // (dataName.result.trim() === "yes" )|| 
-      //  (dataName.result.trim() === "Yes." ) || 
-      //  (dataName.result.trim() === "yes." )) {
-      //   setMessageState((state) => ({
-      //     ...state,
-      //     messages: [
-      //       ...state.messages,
-      //       {
-      //         type: 'apiMessage',
-      //         message: "My name is AI Assistant",
-      //       },
-      //     ],
-      //     pending: undefined,
-      //   }));
-      // } else {
+      if (dataName.result.trim() === "Name") {
+        setMessageState((state) => ({
+          ...state,
+          messages: [
+            ...state.messages,
+            {
+              type: 'apiMessage',
+              message: "My name is AI Assistant",
+            },
+          ],
+          pending: undefined,
+        }));
+      } else {
         const response = await fetch(
           '/api/generate',
           {
@@ -254,7 +251,7 @@ const Chatbot = () => {
           ],
           pending: undefined,
         }));
-      // }
+      }
 
       // answer to question
       setLoading(false);
