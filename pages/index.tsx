@@ -55,7 +55,7 @@ const Chatbot = () => {
     textAreaRef.current?.focus();
   }, []);
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     apiMessageFinal,
     liveAgent,
     agentName,
@@ -189,8 +189,8 @@ const Chatbot = () => {
       setQuery('');
       setMessageState((state) => ({ ...state, pending: '' }));
 
-      const response = await fetch(
-        '/api/generate',
+      const responseName = await fetch(
+        '/api/nameGenerate',
         {
           method: 'POST',
           headers: {
@@ -201,24 +201,62 @@ const Chatbot = () => {
           }),
         },
       );
-
-      if (response.status !== 200) {
-        const error = await response.json();
+      if (responseName.status !== 200) {
+        const error = await responseName.json();
         throw new Error(error.message);
       }
-      const data = await response.json();
-      console.log("data bot : ", data)
-      setMessageState((state) => ({
-        ...state,
-        messages: [
-          ...state.messages,
+      const dataName = await responseName.json();
+      console.log("data bot : ", dataName)
+
+      if ((dataName.result.trim() === "Yes") || 
+      (dataName.result.trim() === "yes" )|| 
+       (dataName.result.trim() === "Yes." ) || 
+       (dataName.result.trim() === "yes." )) {
+        setMessageState((state) => ({
+          ...state,
+          messages: [
+            ...state.messages,
+            {
+              type: 'apiMessage',
+              message: "My name is AI Assistant",
+            },
+          ],
+          pending: undefined,
+        }));
+      } else {
+        const response = await fetch(
+          '/api/generate',
           {
-            type: 'apiMessage',
-            message: data.result,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_Message: question
+            }),
           },
-        ],
-        pending: undefined,
-      }));
+        );
+
+        if (response.status !== 200) {
+          const error = await response.json();
+          throw new Error(error.message);
+        }
+        const data = await response.json();
+        console.log("data bot : ", data)
+        setMessageState((state) => ({
+          ...state,
+          messages: [
+            ...state.messages,
+            {
+              type: 'apiMessage',
+              message: data.result,
+            },
+          ],
+          pending: undefined,
+        }));
+      }
+
+      // answer to question
       setLoading(false);
     }
   }
@@ -228,7 +266,7 @@ const Chatbot = () => {
   const handleEnter = useCallback(
     (e: any) => {
       if (e.key === 'Enter' && query) {
-          handleSubmit(e);
+        handleSubmit(e);
       } else if (e.key == 'Enter') {
         e.preventDefault();
       }
@@ -261,141 +299,141 @@ const Chatbot = () => {
 
   return (
     <>
-    <Layout>
-      {/* chat top header =======================*/}
-      <div className={`${styles.chatTopBar} d-flex flex-row `}>
-        <div className="col-12 text-center d-flex flex-row justify-content-between px-2">
-          <Image src="/chat-logo.png" alt="AI" width={70} height={25} />
+      <Layout>
+        {/* chat top header =======================*/}
+        <div className={`${styles.chatTopBar} d-flex flex-row `}>
+          <div className="col-12 text-center d-flex flex-row justify-content-between px-2">
+            <Image src="/chat-logo.png" alt="AI" width={70} height={25} />
+          </div>
         </div>
-      </div>
-      {/* chat top header end =======================*/}
+        {/* chat top header end =======================*/}
 
-      <div ref={messageListRef} className={`${styles.messageWrapper}`}>
-        {/* language switch message =================*/}
-        <div className={styles.botMessageContainerWrapper}>
+        <div ref={messageListRef} className={`${styles.messageWrapper}`}>
+          {/* language switch message =================*/}
+          <div className={styles.botMessageContainerWrapper}>
 
-          <div
-            className={`${styles.botChatMsgContainer} d-flex flex-row my-2`}
-          >
-            <div className="d-flex">
-              <Image src="/chat-header.png" alt="AI" width="40" height="40" />
-            </div>
-            <div className={`d-flex flex-column py-2 w-100`}>
-              <div
-                className={`welcomeMessageContainer  w-100 d-flex flex-column align-items-start`}
-              >
-                <p className="mb-0">
-                Greetings, <br></br>
-                I am Lucy, and I extend a warm welcome to Loops AI Assistant. Feel free to inquire about any general topic, and experience the prompt delivery of answers through the cutting-edge GPT technology at your disposal.
-                </p>
+            <div
+              className={`${styles.botChatMsgContainer} d-flex flex-row my-2`}
+            >
+              <div className="d-flex">
+                <Image src="/chat-header.png" alt="AI" width="40" height="40" />
+              </div>
+              <div className={`d-flex flex-column py-2 w-100`}>
+                <div
+                  className={`welcomeMessageContainer  w-100 d-flex flex-column align-items-start`}
+                >
+                  <p className="mb-0">
+                    Greetings, <br></br>
+                    I am Lucy, and I extend a warm welcome to Loops AI Assistant. Feel free to inquire about any general topic, and experience the prompt delivery of answers through the cutting-edge GPT technology at your disposal.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* language switch message end =================*/}
+          {/* language switch message end =================*/}
 
-        {/* message conversation container =================*/}
-        <div className={`${styles.messageContentWrapper} d-flex flex-column`}>
-          {/* user and api messages =================*/}
-          {chatMessages.map((message, index) => {
-            if (
-              message.type !== 'apiMessage' &&
-              message.type !== 'userMessage'
-            ) {
-              // skip rendering if the message type is not 'apiMessage' or 'userMessage'
-              return null;
-            }
-            let icon;
-            let className;
-            let userHomeStyles;
-            let wrapper = 'align-items-end justify-content-end';
-            let userStyles = 'justify-content-end flex-row-reverse float-end';
-
-            if (message.type === 'apiMessage') {
-              if (imgLiveBot === 'bot') {
-                icon = (
-                  <Image
-                    src="/chat-header.png"
-                    alt="AI"
-                    width="40"
-                    height="40"
-                    className={styles.botImage}
-                    priority
-                  />
-                );
-              } else {
-                icon = (
-                  <Image
-                    src={agentImage}
-                    alt="AI"
-                    width="40"
-                    height="40"
-                    className={styles.botImage}
-                    priority
-                  />
-                );
+          {/* message conversation container =================*/}
+          <div className={`${styles.messageContentWrapper} d-flex flex-column`}>
+            {/* user and api messages =================*/}
+            {chatMessages.map((message, index) => {
+              if (
+                message.type !== 'apiMessage' &&
+                message.type !== 'userMessage'
+              ) {
+                // skip rendering if the message type is not 'apiMessage' or 'userMessage'
+                return null;
               }
-              className = styles.apimessage;
-              userStyles = 'justify-content-start flex-row float-start';
-              wrapper = 'align-items-start justify-content-start';
-            } else if (message.type === 'userMessage') {
-              icon = (
-                <Image
-                  src="/user.png"
-                  alt="Me"
-                  width="40"
-                  height="40"
-                  className={styles.botImage}
-                  priority
-                />
-              );
-              userHomeStyles = styles.userApiStyles;
-              // The latest message sent by the user will be animated while waiting for a response
-              className =
-                loading && index === chatMessages.length - 1
-                  ? styles.usermessagewaiting
-                  : styles.usermessage;
-            } else {
-            }
+              let icon;
+              let className;
+              let userHomeStyles;
+              let wrapper = 'align-items-end justify-content-end';
+              let userStyles = 'justify-content-end flex-row-reverse float-end';
 
-            // const isLastApiMessageWithNotSure =
-            //   message.type === 'apiMessage' &&
-            //   message.message.includes("Hmm, I'm not sure" || "හ්ම්, මට විශ්වාස නෑ." || "ஹ்ம்ம், எனக்கு உறுதியாக தெரியவில்லை") &&
-            //   index === chatMessages.length - 1;
-            const notSureMessages = [
-              "Hmm, I'm not sure",
-              "Hmm.. I'm not sure.",
-              "I'm sorry",
-              'There is no question'
-            ];
-            // const isLastApiMessageWithNotSure =
-            //   message.type === 'apiMessage' &&
-            //   notSureMessages.some((text) => message.message.includes(text)) &&
-            //   index === chatMessages.length - 1;
+              if (message.type === 'apiMessage') {
+                if (imgLiveBot === 'bot') {
+                  icon = (
+                    <Image
+                      src="/chat-header.png"
+                      alt="AI"
+                      width="40"
+                      height="40"
+                      className={styles.botImage}
+                      priority
+                    />
+                  );
+                } else {
+                  icon = (
+                    <Image
+                      src={agentImage}
+                      alt="AI"
+                      width="40"
+                      height="40"
+                      className={styles.botImage}
+                      priority
+                    />
+                  );
+                }
+                className = styles.apimessage;
+                userStyles = 'justify-content-start flex-row float-start';
+                wrapper = 'align-items-start justify-content-start';
+              } else if (message.type === 'userMessage') {
+                icon = (
+                  <Image
+                    src="/user.png"
+                    alt="Me"
+                    width="40"
+                    height="40"
+                    className={styles.botImage}
+                    priority
+                  />
+                );
+                userHomeStyles = styles.userApiStyles;
+                // The latest message sent by the user will be animated while waiting for a response
+                className =
+                  loading && index === chatMessages.length - 1
+                    ? styles.usermessagewaiting
+                    : styles.usermessage;
+              } else {
+              }
 
-            return (
-              <>
-                <div
-                  key={`chatMessage-${index}`}
-                  className={styles.botMessageContainerWrapper}
-                >
+              // const isLastApiMessageWithNotSure =
+              //   message.type === 'apiMessage' &&
+              //   message.message.includes("Hmm, I'm not sure" || "හ්ම්, මට විශ්වාස නෑ." || "ஹ்ம்ம், எனக்கு உறுதியாக தெரியவில்லை") &&
+              //   index === chatMessages.length - 1;
+              const notSureMessages = [
+                "Hmm, I'm not sure",
+                "Hmm.. I'm not sure.",
+                "I'm sorry",
+                'There is no question'
+              ];
+              // const isLastApiMessageWithNotSure =
+              //   message.type === 'apiMessage' &&
+              //   notSureMessages.some((text) => message.message.includes(text)) &&
+              //   index === chatMessages.length - 1;
+
+              return (
+                <>
                   <div
-                    className={`${styles.botChatMsgContainer} ${userStyles} d-flex my-2`}
+                    key={`chatMessage-${index}`}
+                    className={styles.botMessageContainerWrapper}
                   >
-                    <div className="d-flex">{icon}</div>
-                    <div className={`${wrapper} d-flex flex-column ms-2`}>
-                      <div
-                        className={`${styles.botMessageContainer} ${userHomeStyles} d-flex flex-column my-1`}
-                      >
-                        <p className="mb-0">{message.message}</p>
-                        {/* {message.type === 'apiMessage' && trMsg && (
+                    <div
+                      className={`${styles.botChatMsgContainer} ${userStyles} d-flex my-2`}
+                    >
+                      <div className="d-flex">{icon}</div>
+                      <div className={`${wrapper} d-flex flex-column ms-2`}>
+                        <div
+                          className={`${styles.botMessageContainer} ${userHomeStyles} d-flex flex-column my-1`}
+                        >
+                          <p className="mb-0">{message.message}</p>
+                          {/* {message.type === 'apiMessage' && trMsg && (
                           <div
                             className={`${styles.botMessageContainer} ${styles.apimessage} d-flex flex-column my-1`}
                           >
                             <p className="mb-0">{trMsg}</p>
                           </div>
                         )} */}
-                        {/* {isLastApiMessageWithNotSure && (
+                          {/* {isLastApiMessageWithNotSure && (
                           <button
                             className={`bg-dark rounded text-white py-2 px-3 my-3`}
                             style={{
@@ -409,15 +447,15 @@ const Chatbot = () => {
                             Connect with Live Agent
                           </button>
                         )} */}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
-            );
-          })}
-          {/* user and api messages end =================*/}
-          {/* {waitingLiveAgent && (
+                </>
+              );
+            })}
+            {/* user and api messages end =================*/}
+            {/* {waitingLiveAgent && (
             <div className="d-flex bg-chat-close-msg text-center justify-content-center py-3">
               <p className="mb-0">
                 One of our Customer Support agents will be with you soon. Stay
@@ -425,7 +463,7 @@ const Chatbot = () => {
               </p>
             </div>
           )} */}
-          {/* {
+            {/* {
           agentInfoMsg && (
             <div className="alert alert-info mx-3 text-center  alert-dismissible fade show" role="alert">
               Now you are chatting with {agentName}
@@ -433,21 +471,21 @@ const Chatbot = () => {
             </div>
           )
         } */}
-          {/* {
+            {/* {
           agentInfoMsg && (
             <div className="alert paddingalert alert-info mx-3 text-center  alert-dismissible fade show" role="alert">
              <p className='mb-0 alertAgent' style={{fontSize: "9px !important"}}>Now you are chatting with {agentName}</p>
             </div>
           )
         } */}
-          {/* {closeState && (
+            {/* {closeState && (
             <div className="d-flex bg-chat-close-msg text-center justify-content-center py-3">
               <p className="mb-0">Thank you for contacting us.</p>
             </div>
           )} */}
 
-          {/* show rating =================*/}
-          {/* {showChatRating && (
+            {/* show rating =================*/}
+            {/* {showChatRating && (
             <div className="d-flex flex-column" id="chatRating">
               <div className="d-flex">
                 <Image src="/chat-header.png" alt="AI" width="40" height="40" />
@@ -512,56 +550,56 @@ const Chatbot = () => {
               </div>
             </div>
           )} */}
-          {/* show rating end =================*/}
+            {/* show rating end =================*/}
 
-          {closeRating && (
-            <div className="d-flex bg-chat-ratesuccess-msg text-center justify-content-center py-3">
-              <p className="mb-0">Thank you for your feedback</p>
-            </div>
-          )}
+            {closeRating && (
+              <div className="d-flex bg-chat-ratesuccess-msg text-center justify-content-center py-3">
+                <p className="mb-0">Thank you for your feedback</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {/* message conversation container end =================*/}
+        {/* message conversation container end =================*/}
 
-      {/* input fields =================*/}
-      <div className={`${styles.inputContainer}`}>
-        <textarea
-          disabled={loading}
-          onKeyDown={handleEnter}
-          ref={textAreaRef}
-          autoFocus={false}
-          rows={1}
-          maxLength={512}
-          id="userInput"
-          name="userInput"
-          placeholder={
-            loading ? 'Waiting for response...' : 'What is this question about?'
-          }
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className={styles.textarea}
-        />
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className={`${styles.inputIconContainer} `}
-        >
-          {loading ? (
-            <div className={styles.loadingwheel}>
-              <LoadingDots color="#fff" />
-            </div>
-          ) : (
-            <AiOutlineSend className={styles.sendIcon} />
-          )}
-        </button>
-      </div>
-      {error && (
-        <div className="border border-red-400 rounded-md p-4">
-          <p className="text-red-500">{error}</p>
+        {/* input fields =================*/}
+        <div className={`${styles.inputContainer}`}>
+          <textarea
+            disabled={loading}
+            onKeyDown={handleEnter}
+            ref={textAreaRef}
+            autoFocus={false}
+            rows={1}
+            maxLength={512}
+            id="userInput"
+            name="userInput"
+            placeholder={
+              loading ? 'Waiting for response...' : 'What is this question about?'
+            }
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className={styles.textarea}
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className={`${styles.inputIconContainer} `}
+          >
+            {loading ? (
+              <div className={styles.loadingwheel}>
+                <LoadingDots color="#fff" />
+              </div>
+            ) : (
+              <AiOutlineSend className={styles.sendIcon} />
+            )}
+          </button>
         </div>
-      )}
-      {/* input fields end ================= */}
-    </Layout>
+        {error && (
+          <div className="border border-red-400 rounded-md p-4">
+            <p className="text-red-500">{error}</p>
+          </div>
+        )}
+        {/* input fields end ================= */}
+      </Layout>
     </>
   );
 };
