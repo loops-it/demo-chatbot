@@ -223,69 +223,6 @@ const Chatbot = () => {
     }
   }
 
-  // const handleLiveAgent = async (e: any) => {
-  //   e.preventDefault();
-  //   setError(null);
-
-  //   if (!query) {
-  //     alert('Please input a question');
-  //     return;
-  //   }
-  //   let question = query.trim();
-  //   setMessageState((state) => ({
-  //     ...state,
-  //     messages: [
-  //       ...state.messages,
-  //       {
-  //         type: 'userMessage',
-  //         message: question,
-  //       },
-  //     ],
-  //     pending: undefined,
-  //   }));
-  //   if (liveAgent === true) {
-  //     const response = await fetch(
-  //       'https://solutions.it-marketing.website/live-chat-user',
-  //       {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({ chatId: id, user_Message: question }),
-  //       },
-  //     );
-
-  //     if (response.status !== 200) {
-  //       const error = await response.json();
-  //       throw new Error(error.message);
-  //     }
-  //     const data = await response.json();
-  //     setQuery('');
-  //   }
-  // };
-
-  // const SwitchToLiveAgent = async () => {
-  //   const response = await fetch(
-  //     'https://solutions.it-marketing.website/switch-to-live-agent',
-  //     {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ chatId: id }),
-  //     },
-  //   );
-
-  //   if (response.status !== 200) {
-  //     const error = await response.json();
-  //     throw new Error(error.message);
-  //   }
-  //   const data = await response.json();
-  //   setWaitingLiveAgent(true);
-  //   if (data.success === 'Success') {
-  //     setLiveAgent(true);
-  //   }
-  // };
 
   //prevent empty submissions
   const handleEnter = useCallback(
@@ -321,32 +258,6 @@ const Chatbot = () => {
     agentInfoMsg,
   ]);
 
-  // async function sendRateValues() {
-    // const sendData = async (botName, index) => {
-    // try {
-    //   console.log('chat id : ', id);
-    //   console.log('rating : ', rating);
-    //   console.log('feedback : ', inputValue);
-
-    //   const response = await fetch('/api/star_rating', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       chatId: id,
-    //       ratingValue: rating,
-    //       feedbackMessage: inputValue,
-    //     }),
-    //   });
-    //   const ratingData = await response.json();
-    //   setCloseRating(true);
-    //   console.log('rating data : ', ratingData);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    // }
-  // }
 
   return (
     <>
@@ -355,13 +266,6 @@ const Chatbot = () => {
       <div className={`${styles.chatTopBar} d-flex flex-row `}>
         <div className="col-12 text-center d-flex flex-row justify-content-between px-2">
           <Image src="/chat-logo.png" alt="AI" width={70} height={25} />
-          {/* <button
-            className="close-button"
-            onClick={handleCloseChat}
-            title="Close Chat"
-          >
-            <AiOutlineClose />{' '}
-          </button> */}
         </div>
       </div>
       {/* chat top header end =======================*/}
@@ -369,9 +273,6 @@ const Chatbot = () => {
       <div ref={messageListRef} className={`${styles.messageWrapper}`}>
         {/* language switch message =================*/}
         <div className={styles.botMessageContainerWrapper}>
-          {/* <div className="d-flex justify-content-center pt-1">
-            <Image src="/chat-logo.png" alt="AI" width={180} height={50} />
-          </div> */}
 
           <div
             className={`${styles.botChatMsgContainer} d-flex flex-row my-2`}
@@ -379,12 +280,13 @@ const Chatbot = () => {
             <div className="d-flex">
               <Image src="/chat-header.png" alt="AI" width="40" height="40" />
             </div>
-            <div className={`d-flex flex-column py-2`}>
+            <div className={`d-flex flex-column py-2 w-100`}>
               <div
-                className={`welcomeMessageContainer d-flex flex-column align-items-start`}
+                className={`welcomeMessageContainer  w-100 d-flex flex-column align-items-start`}
               >
                 <p className="mb-0">
-                  Hello, Welcome to Loops.
+                Greetings, <br></br>
+                I am Lucy, and I extend a warm welcome to Loops AI Assistant. Feel free to inquire about any general topic, and experience the prompt delivery of answers through the cutting-edge GPT technology at your disposal.
                 </p>
               </div>
             </div>
